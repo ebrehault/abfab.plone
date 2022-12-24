@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="abfab.plone">
+
+  <adapter
+    for="* zope.publisher.interfaces.IRequest"
+    name="~"
+    factory=".api.AbFabTraverser"
+    />
+
+  <browser:page
+      for="*"
+      name="reset_abfab"
+      permission="zope2.Public"
+      class=".api.Reset"
+      />
+
+</configure>

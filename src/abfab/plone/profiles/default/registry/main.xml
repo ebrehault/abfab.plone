@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<registry
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="abfab.plone">
+
+<record name="abfab.last_modified">
+  <field type="plone.registry.field.ASCIILine">
+    <title>Last code modification</title>
+    <required>False</required>
+  </field>
+  <value></value>
+</record>
+
+</registry>

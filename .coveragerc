@@ -1,0 +1,6 @@
+[report]
+include =
+    src/abfab/*
+omit =
+    */test*
+    */upgrades/*
