@@ -10,6 +10,8 @@ from .catalog import CatalogFactory
 import json
 import mimetypes
 
+ABFAB_ROOT = '/++api++/~'
+
 @implementer(IPublishTraverse)
 class AbFabTraverser(object):
 
@@ -49,6 +51,12 @@ class AbFabTraverser(object):
             else:
                 return self.view_source(object)
         else:
+            index_mjs = self.get_object(path + '/index.mjs')
+            if index_mjs:
+                return self.request.response.redirect(ABFAB_ROOT + path + '/index.mjs')
+            index_js = self.get_object(path + '/index.js')
+            if index_js:
+                return self.request.response.redirect(ABFAB_ROOT + path + '/index.js')
             self.request.response.setStatus(404)
             return "Record not found"
     
@@ -79,15 +87,21 @@ class AbFabTraverser(object):
         path = self.path
         if path[-1] == self.request.method:
             path = path[:-1]
-        return "/".join([] + path)
+        return "/".join([''] + path)
     
     def get_object(self, path):
         search = [r for r in self.soup.query(Eq('path', path))]
-        if len(search) > 0:
-            # TODO: return the best match (like index.js, index.html, etc.)
+        # import pdb; pdb.set_trace()
+        if len(search) == 1:
             return search[0]
-        else:
+        elif len(search) == 0:
             return None
+        else:
+            exact = [obj for obj in search if obj.attrs['path'] == path]
+            if len(exact) == 1:
+                return exact[0]
+            else:
+                return None
 
     def wrap_component(self, js_component, path_to_content, type='json'):
         if not js_component:
@@ -95,23 +109,23 @@ class AbFabTraverser(object):
             return "Not found"
         get_content = ""
         if path_to_content:
-            path_to_content = (path_to_content.startswith('/') and "/~" + path_to_content) or path_to_content
-            get_content = """import {{API, redirectToLogin}} from '/~/abfab/core.js';
+            path_to_content = (path_to_content.startswith('/') and ABFAB_ROOT + path_to_content) or path_to_content
+            get_content = """import {{API, redirectToLogin}} from '{root}/abfab/core.js';
     let content;
     try {{
         let response = await API.fetch('{path_to_content}');
         content = await response.{type}();
     }} catch (e) {{
         redirectToLogin();
-    }}""".format(path_to_content=path_to_content, type=type)
+    }}""".format(path_to_content=path_to_content, type=type, root=ABFAB_ROOT)
         else:
             content = self.request.get('content', {})
             get_content = """let content = {content}""".format(content=content)
         body = """<!DOCTYPE html>
     <html lang="en">
     <script type="module">
-        import Component from '/~{component}';
-        import Main from '/~/abfab/main.svelte.js';
+        import Component from '{root}{component}';
+        import Main from '{root}/abfab/main.svelte.js';
         {get_content}
         const component = new Main({{
             target: document.body,
@@ -120,7 +134,7 @@ class AbFabTraverser(object):
         export default component;
     </script>
     </html>
-    """.format(component=js_component.attrs['path'], get_content=get_content)
+    """.format(component=js_component.attrs['path'], get_content=get_content, root=ABFAB_ROOT)
         self.request.response.setHeader('Content-Type', 'text/html')
         self.request.response.setHeader('ETag-Type', self.get_last_modified())
         return body
