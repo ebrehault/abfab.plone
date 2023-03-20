@@ -17,4 +17,11 @@
       class=".api.Reset"
       />
 
+  <browser:page
+      for="*"
+      name="abfab_tree"
+      permission="zope2.Public"
+      class=".api.Tree"
+      />
+
 </configure>
