@@ -42,7 +42,11 @@ class AbFabTraverser(object):
             return self.view_basic(self.get_path(raw=False))
         if path.endswith('/@edit-data'):
             obj = self.get_object(self.get_path(raw=False))
-            return self.view_source(obj, 'text/plain')
+            if obj:
+                return self.view_source(obj, 'text/plain')
+            else:
+                data = self.view_basic(self.get_path(raw=False))
+                return json.dumps(data)
         if path.endswith('/@edit'):
             path = self.get_path(raw=False)
             editor_component = self.get_object('/abfab/editor/editor.svelte')
@@ -133,7 +137,6 @@ class AbFabTraverser(object):
     
     def get_object(self, path):
         search = [r for r in self.soup.query(Eq('path', path))]
-        # import pdb; pdb.set_trace()
         if len(search) == 1:
             return search[0]
         elif len(search) == 0:
@@ -191,7 +194,6 @@ class AbFabTraverser(object):
         return object.attrs['file']
  
     def view_basic(self, path):
-        # import pdb; pdb.set_trace()
         object = self.get_object(path)
         if not object:
             return {"type": "Directory", "path": path}
