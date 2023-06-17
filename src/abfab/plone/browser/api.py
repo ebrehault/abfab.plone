@@ -65,12 +65,21 @@ class AbFabTraverser(object):
             else:
                 return self.view_source(object)
         else:
+            js = self.get_object(path + '.js')
+            if js:
+                return self.request.response.redirect(ABFAB_ROOT + path + '.js')
             index_mjs = self.get_object(path + '/index.mjs')
             if index_mjs:
                 return self.request.response.redirect(ABFAB_ROOT + path + '/index.mjs')
             index_js = self.get_object(path + '/index.js')
             if index_js:
                 return self.request.response.redirect(ABFAB_ROOT + path + '/index.js')
+            package = self.get_object(path + '/package.json')
+            if package:
+                packageJson = json.loads(package.attrs['file'])
+                module = packageJson.get('module', None)
+                if module:
+                    return self.request.response.redirect(ABFAB_ROOT + path + '/' + module)
             self.request.response.setStatus(404)
             return "Record not found"
     
