@@ -1,63 +1,55 @@
-.. This README is meant for consumption by humans and pypi. Pypi can render rst files so please do not use Sphinx features.
-   If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide.html
-   This text does not appear on pypi or github. It is a comment.
-
-.. image:: https://github.com/collective/abfab.plone/actions/workflows/plone-package.yml/badge.svg
-    :target: https://github.com/collective/abfab.plone/actions/workflows/plone-package.yml
-
-.. image:: https://coveralls.io/repos/github/collective/abfab.plone/badge.svg?branch=main
-    :target: https://coveralls.io/github/collective/abfab.plone?branch=main
-    :alt: Coveralls
-
-.. image:: https://codecov.io/gh/collective/abfab.plone/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/collective/abfab.plone
-
-.. image:: https://img.shields.io/pypi/v/abfab.plone.svg
-    :target: https://pypi.python.org/pypi/abfab.plone/
-    :alt: Latest Version
-
-.. image:: https://img.shields.io/pypi/status/abfab.plone.svg
-    :target: https://pypi.python.org/pypi/abfab.plone
-    :alt: Egg Status
-
-.. image:: https://img.shields.io/pypi/pyversions/abfab.plone.svg?style=plastic   :alt: Supported - Python Versions
-
-.. image:: https://img.shields.io/pypi/l/abfab.plone.svg
-    :target: https://pypi.python.org/pypi/abfab.plone/
-    :alt: License
-
-
 ===========
 abfab.plone
 ===========
 
-AbFab for Plone
+This is the server-side add-on implementing AbFab for Plone.
 
-Features
---------
-
-- Can be bullet points
+It requires https://github.com/ebrehault/abfab-volto to be installed on the client side.
 
 
-Examples
---------
+Why? What for?
+--------------
 
-This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
+The main objective behind AbFab is to provide a way to make frontend easy, fun, and pleasant.
 
+Client-side technics do improve the user experience, nevertheless they should not damage the developer experience. Bundling is not scalable, adding a new page to an existing app should not involve to re-deploy the entire thing.
 
-Documentation
--------------
+AbFab is not meant to be a gigantic framework covering thousands of use cases. It targets small features that could probably be implemented in more classical ways, but you just do not want to deploy too many things (like a database, a bunch of backend endpoints, a security layer, a frontend app, etc.), or maybe you do not want to pollute your existing stack with extra dependencies just to achieve a small widget in one given page of your entire app.
 
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
+AbFab is an all-in-one platform allowing to develop simple frontend components that can be published anywhere.
 
+Description
+-----------
 
-Translations
-------------
+AbFab is a web application publication environment. It provides the essential services any web application needs:
 
-This product has been translated into
+- a secured and fast backend storage,
 
-- Klingon (thanks, K'Plai)
+- a minimalistic yet powerful frontend component framework (Svelte),
+
+- a light JavaScript runtime offering routing and backend connectivity.
+
+Components are written in Svelte, they are compiled in the browser (you do not need a local NPM), stored in the Plone site (in a soup, see https://pypi.org/project/souper.plone/), and can be published to any page as a web component.
+
+Simple things must be simple
+----------------------------
+
+No bundle and no static files: You will not have to use NPM, you will not need to bundle your code. All the components and data are on the server, there is no need to generate and deploy static files.
+
+**Code-splitting**: Each component is compiled automatically and independently, and each page of your app will load only the needed components.
+
+**Client-side navigation**: Navigation from one page to another is performed by loading only the missing data and the application renders it on the client-side, so the application is always fast. It behaves as a Single-Page-App, but it's not.
+
+**Component approach**: Components are an efficient way to structure an app (HTML is built that way actually). You should be able use them outside the SPA pattern.
+
+Do you need to learn a new technology? NO :)
+--------------------------------------------
+
+**LOW CODE**: To develop an AbFab app, you will just need HTML, CSS and (simple) JavaScript. Svelte could be considered as a templating layer, it is very simple to learn and to use and will not be a blocker.
+
+**LOW DEPLOYMENT**: AbFab is not just a frontend solution, it comes with backend capabilities, your component are stored in the site directly.
+
+**LOW BUILD**: Components can be developed directly from the AbFab online interface. No NPM, no bundling.
 
 
 Installation
@@ -75,34 +67,36 @@ Install abfab.plone by adding it to your buildout::
 
 and then running ``bin/buildout``
 
+In Volto, add abfab-volto to your add-ons::
 
-Authors
--------
+    {
+      "name": "my-nice-volto-project",
+      ...
+      "addons": [
+        "abfab-volto",
+        ...
+      ],
+      ...
+    }
 
-Provided by awesome people ;)
+
+Author
+------
+
+Eric Bréhault
 
 
-Contributors
-------------
+Inspiration
+-----------
 
-Put your name here, you deserve it!
-
-- ?
+Dawn French, Jennifer Saunders and Joanna Lumley.
 
 
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/abfab.plone/issues
-- Source Code: https://github.com/collective/abfab.plone
-- Documentation: https://docs.plone.org/foo/bar
-
-
-Support
--------
-
-If you are having issues, please let us know.
-We have a mailing list located at: project@example.com
+- Issue Tracker: https://github.com/ebrehault/abfab.plone/issues
+- Source Code: https://github.com/ebrehault/abfab.plone
 
 
 License
