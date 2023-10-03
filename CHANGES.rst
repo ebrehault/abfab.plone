@@ -5,7 +5,8 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Check permissions.
+  [ebrehault]
 
 
 1.0a1 (2023-09-20)
