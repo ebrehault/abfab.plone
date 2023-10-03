@@ -76,7 +76,7 @@ Installation
           form-memory-limit 4MB
       </dos_protection>
 
-Check `the rest of the installation in the abfab-volto's README<https://github.com/ebrehault/abfab-volto#installation>`_.`
+Check the rest of the installation in the abfab-volto's README https://github.com/ebrehault/abfab-volto#installation.
 
 Author
 ------
