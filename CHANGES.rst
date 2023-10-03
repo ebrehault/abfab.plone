@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0a2 (unreleased)
+1.0a2 (2023-10-03)
 ------------------
 
 - Check permissions.
