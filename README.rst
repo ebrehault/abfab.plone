@@ -55,30 +55,28 @@ Do you need to learn a new technology? NO :)
 Installation
 ------------
 
-Install abfab.plone by adding it to your buildout::
+- Install abfab.plone with `pip`::
 
-    [buildout]
+      $ pip install abfab.plone
 
-    ...
+  Or using buildout::
 
-    eggs =
-        abfab.plone
+      [buildout]
 
-
-and then running ``bin/buildout``
-
-In Volto, add abfab-volto to your add-ons::
-
-    {
-      "name": "my-nice-volto-project",
       ...
-      "addons": [
-        "abfab-volto",
-        ...
-      ],
-      ...
-    }
 
+      eggs =
+          abfab.plone
+
+  and then running `bin/buildout`
+
+- Raise the upload max size limit in `zope.conf`::
+
+      <dos_protection>
+          form-memory-limit 4MB
+      </dos_protection>
+
+Check `the rest of the installation in the abfab-volto's README<https://github.com/ebrehault/abfab-volto#installation>`_.`
 
 Author
 ------

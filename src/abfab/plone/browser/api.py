@@ -84,6 +84,8 @@ class AbFabTraverser(object):
             return "Record not found"
     
     def POST(self):
+        if can_manage(self.request) is False:
+            return
         body = self.request.get('BODY')
         data = json.loads(body)
         id = data.get('id', None)
@@ -108,6 +110,8 @@ class AbFabTraverser(object):
         return {"path": path}
     
     def PATCH(self):
+        if can_manage(self.request) is False:
+            return
         body = self.request.get('BODY')
         data = json.loads(body)
         path = self.get_path()
@@ -122,6 +126,8 @@ class AbFabTraverser(object):
         return {"path": path}
     
     def DELETE(self):
+        if can_manage(self.request) is False:
+            return
         path = self.get_path()
         for resource in self.soup.query(Eq('path', path)):
             del self.soup[resource]
@@ -229,6 +235,8 @@ class Reset(object):
         self.request = request
 
     def __call__(self):
+        if can_manage(self.request) is False:
+            return
         soup = get_soup('abfab', self.context)
         provideUtility(CatalogFactory(), ICatalogFactory, name='abfab')
         soup.clear()
@@ -265,3 +273,10 @@ class Tree(object):
         for path in paths:
             _recurse(new_path_dict, path, Path(path).parts)
         return new_path_dict
+
+def can_manage(request):
+    user = api.user.get_current()
+    if not api.user.has_permission('Manage portal', user=user):
+        request.response.setStatus(403)
+        return False
+    return True
