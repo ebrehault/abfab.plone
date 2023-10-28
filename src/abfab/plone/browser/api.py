@@ -1,3 +1,5 @@
+from AccessControl import getSecurityManager
+from Products.CMFCore.permissions import ManagePortal
 from zope.interface import implementer
 from zope.component import provideUtility
 from zope.publisher.interfaces import IPublishTraverse
@@ -275,8 +277,8 @@ class Tree(object):
         return new_path_dict
 
 def can_manage(request):
-    user = api.user.get_current()
-    if not api.user.has_permission('Manage portal', user=user):
+    sm = getSecurityManager()
+    if not sm.checkPermission(ManagePortal, api.portal.get()):
         request.response.setStatus(403)
         return False
     return True
